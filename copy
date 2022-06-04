@@ -4,7 +4,7 @@ DIR_TO_RETURN="$(pwd)"
 
 cd configs
 
-for i in $(ls ); do
+for i in $(ls -A); do
 	cd "$i"
 	find . -type f -exec cp '{}' ~/ ';'
 done
