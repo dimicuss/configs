@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DIR_TO_RETURN="$(pwd)"
+
+cd configs
+
+for i in $(ls ); do
+	cd "$i"
+	find . -type f -exec cp '{}' ~/ ';'
+done
+
+cd $DIR_TO_RETURN
