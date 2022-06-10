@@ -1,12 +1,12 @@
 #!/bin/bash
 
-DIR_TO_RETURN="$(pwd)"
+INITIAL_DIR="$(pwd)"
 
 cd configs
 
 for i in $(ls -A); do
-	cd "$i"
+	cd "$INITIAL_DIR/$i"
 	find . -type f -exec cp '{}' ~/ ';'
 done
 
-cd $DIR_TO_RETURN
+cd $INITIAL_DIR
