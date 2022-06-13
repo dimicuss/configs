@@ -1,12 +1,15 @@
 #!/bin/bash
 
 INITIAL_DIR="$(pwd)"
+CONFIGS_DIR="$INITIAL_DIR/configs"
 
-cd configs
+if [[ -d "$CONFIGS_DIR" ]]; then
+	for i in $(ls -A "$CONFIGS_DIR"); do
+		cd "$CONFIGS_DIR/$i"
+		find . -maxdepth 1 -exec cp -r '{}' ~/ ';'
+	done	
 
-for i in $(ls -A); do
-	cd "$INITIAL_DIR/$i"
-	find . -type f -exec cp '{}' ~/ ';'
-done
-
-cd $INITIAL_DIR
+	cd $INITIAL_DIR
+else
+	echo "Configs dir not dound"
+fi
