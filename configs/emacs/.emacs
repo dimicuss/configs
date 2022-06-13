@@ -1,3 +1,12 @@
+(eval-when-compile
+  (require 'package)
+  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+  (package-initialize))
+
+(load "~/.emacs.d/config/lisp.el")
+(load "~/.emacs.d/config/typescript.el")
+(global-set-key (kbd "C-x C-c") nil)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -18,18 +27,14 @@
  '(company-minimum-prefix-length 1)
  '(custom-enabled-themes '(deeper-blue))
  '(flycheck-idle-change-delay 0.1)
+ '(inferior-lisp-program "sbcl" t)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(ispell-dictionary nil)
  '(make-backup-files nil)
  '(message-log-max nil)
+ '(package-selected-packages '(slime web-mode use-package tide company))
  '(tab-width 4))
 
-(load "~/.emacs.d/config/type-script.el")
 
-(eval-when-compile
-  (require 'package)
-  (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-  (package-initialize))
 
-(global-set-key (kbd "C-x C-c") nil)
