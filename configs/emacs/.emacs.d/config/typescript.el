@@ -1,8 +1,10 @@
 (require 'use-package)
 
+(use-package typescript-mode :ensure t)
 (use-package web-mode :ensure t)
 (use-package company :ensure t)
 (use-package tide :ensure t)
+
 
 (defun setup-tide-mode ()
   (interactive)
