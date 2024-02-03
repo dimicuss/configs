@@ -1,6 +1,6 @@
 (use-package company :ensure t)
 (use-package typescript-mode
-  :after tree-sitter
+  :ensure t
   :config
   (define-derived-mode typescriptreact-mode typescript-mode "TypeScript TSX")
   (add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescriptreact-mode))
@@ -10,7 +10,6 @@
   (add-hook 'typescript-mode-hook (lambda () (tsi-typescript-mode 1))))
 
 (use-package tsi
-  :after tree-sitter
   :quelpa (tsi :fetcher github :repo "orzechowskid/tsi.el")
   :commands (tsi-typescript-mode tsi-json-mode tsi-css-mode)
   :init
