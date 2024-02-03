@@ -36,8 +36,8 @@
  '(message-log-max nil)
  '(package-selected-packages
    '(tsi quelpa-use-package tree-sitter tree-sitter-langs tiny slime web-mode use-package tide company))
- '(typescript-indent-level 2)
-(custom-set-faces
+   '(typescript-indent-level 2))
+ (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
