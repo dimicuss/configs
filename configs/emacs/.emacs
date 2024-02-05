@@ -15,7 +15,6 @@
 
 
 (load "~/.emacs.d/config/typescript.el")
-(load "~/.emacs.d/config/lisp.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -27,17 +26,16 @@
  '(company-minimum-prefix-length 1)
  '(custom-enabled-themes '(deeper-blue))
  '(indent-tabs-mode nil)
- '(inferior-lisp-program "sbcl" t)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(ispell-dictionary nil)
  '(js-indent-level 2)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages
-   '(tsi quelpa-use-package tree-sitter tree-sitter-langs tiny slime web-mode use-package tide company))
-   '(typescript-indent-level 2))
- (custom-set-faces
+ '(package-selected-packages nil)
+ '(warning-minimum-level :error))
+ 
+(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
