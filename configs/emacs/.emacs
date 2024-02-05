@@ -2,9 +2,9 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package yasnippet :ensure t)
 (use-package lsp-mode :ensure t)
 (use-package company :ensure t)
-(use-package yasnippet :ensure t)
 (use-package treesit-auto
   :ensure t
   :custom
@@ -13,30 +13,37 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(add-to-list 'treesit-auto-recipe-list (make-treesit-auto-recipe
-	:lang 'tsx
-	:ts-mode 'tsx-ts-mode
-	:remap '(typescript-tsx-mode)
-	:requires 'typescript
-	:url "https://github.com/tree-sitter/tree-sitter-typescript"
-	:revision "v0.20.2"
-	:source-dir "tsx/src"
-	:ext "\\.tsx\\'"))
+(add-to-list 'treesit-auto-recipe-list
+             (make-treesit-auto-recipe
+	      :lang 'tsx
+	      :ts-mode 'tsx-ts-mode
+	      :remap '(typescript-tsx-mode)
+	      :requires 'typescript
+	      :url "https://github.com/tree-sitter/tree-sitter-typescript"
+	      :revision "v0.20.2"
+	      :source-dir "tsx/src"
+	      :ext "\\.tsx\\'"))
 
-(add-to-list 'treesit-auto-recipe-list (make-treesit-auto-recipe
-	:lang 'typescript	       
-	:ts-mode 'typescript-ts-mode
-	:remap 'typescript-mode
-	:requires 'tsx
-	:url "https://github.com/tree-sitter/tree-sitter-typescript"
-	:revision "v0.20.2"
-	:source-dir "typescript/src"
-	:ext "\\.ts\\'"))
+(add-to-list 'treesit-auto-recipe-list
+             (make-treesit-auto-recipe
+	      :lang 'typescript	       
+	      :ts-mode 'typescript-ts-mode
+	      :remap 'typescript-mode
+	      :requires 'tsx
+	      :url "https://github.com/tree-sitter/tree-sitter-typescript"
+	      :revision "v0.20.2"
+	      :source-dir "typescript/src"
+	      :ext "\\.ts\\'"))
 
 (defun handle-ts-mode ()
+  (lsp-deferred)
   (company-mode +1)
   (yas-minor-mode)
-  (lsp-deferred))
+  (set (make-local-variable 'company-backends)
+       '((company-dabbrev-code company-yasnippet))))
+
+(yas-reload-all)
+(push '(company-semantic :with company-yasnippet) company-backends)
 
 (add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
 (add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
