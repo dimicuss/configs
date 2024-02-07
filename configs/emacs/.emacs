@@ -38,8 +38,6 @@
 	      :source-dir "typescript/src"
 	      :ext "\\.ts\\'"))
 
-(setq read-process-output-max (* 1024 1024))
-
 (defun handle-ts-mode ()
   (lsp-deferred)
   (company-mode 1)
@@ -49,14 +47,19 @@
  
 (add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
 (add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
+(add-hook 'before-save-hook #'lsp-format-buffer)
+
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 
+(helm-mode 1)
 (yas-reload-all)
 (savehist-mode 1)
-(helm-mode 1)
+(desktop-save-mode 1)
 (push '(company-semantic :with company-yasnippet) company-backends)
+
+(setq read-process-output-max (* 1024 1024))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
