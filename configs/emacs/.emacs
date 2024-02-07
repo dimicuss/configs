@@ -41,7 +41,7 @@
 (defun handle-ts-mode ()
   (lsp-deferred)
   (company-mode 1)
-  (yas-minor-mode) 
+  (yas-minor-mode)
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
  
@@ -67,11 +67,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-save-default nil)
- '(company-idle-delay 0.1)
+ '(company-idle-delay 0.0)
  '(company-minimum-prefix-length 1)
  '(custom-enabled-themes '(modus-vivendi-tritanopia))
  '(desktop-save-mode t)
  '(gc-cons-threshold 1600000)
+ '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
