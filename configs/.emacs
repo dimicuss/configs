@@ -39,15 +39,20 @@
 	      :source-dir "typescript/src"
 	      :ext "\\.ts\\'"))
 
-(defun handle-ts-mode ()
-  (lsp-deferred)
+(defun run-company ()
   (company-mode 1)
   (yas-minor-mode)
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
- 
+
+(defun handle-ts-mode ()
+  (lsp-deferred)
+  (run-company))
+
 (add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
 (add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
+(add-hook 'bash-ts-mode-hook #'handle-ts-mode)
+(add-hook 'emacs-lisp-mode-hook #'run-company)
 (add-hook 'before-save-hook #'lsp-format-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
@@ -71,7 +76,7 @@
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
- '(custom-enabled-themes '(modus-vivendi-tritanopia))
+ '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
  '(flycheck-check-syntax-automatically '(save mode-enabled))
  '(flycheck-highlighting-mode 'lines)
@@ -89,7 +94,8 @@
  '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(flycheck yasnippet treesit-auto pkg-info langtool helm-xref helm-lsp company))
  '(standard-indent 2)
  '(treesit-font-lock-level 4)
  '(warning-minimum-level :error))

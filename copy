@@ -4,12 +4,8 @@ INITIAL_DIR="$(pwd)"
 CONFIGS_DIR="$INITIAL_DIR/configs"
 
 if [[ -d "$CONFIGS_DIR" ]]; then
-	for i in $(ls -A "$CONFIGS_DIR"); do
-		cd "$CONFIGS_DIR/$i"
-		find . -maxdepth 1 -exec cp -r '{}' ~/ ';'
-	done	
-
-	cd $INITIAL_DIR
+    cd "$CONFIGS_DIR"
+    find . -maxdepth 1 -type f -exec cp -r '{}' ~/ ';'    
 else
-	echo "Configs dir not dound"
+    echo "Configs dir not found"
 fi
