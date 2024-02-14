@@ -36,17 +36,20 @@
 	      :source-dir "typescript/src"
 	      :ext "\\.ts\\'"))
 
-(defun handle-ts-mode ()
-  (eglot-ensure)
+(defun setup-company ()
   (company-mode 1)
   (yas-minor-mode)
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
 
+(defun handle-ts-mode ()
+  (eglot-ensure)
+  (setup-company))
+
 (add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
 (add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
 (add-hook 'bash-ts-mode-hook #'handle-ts-mode)
-(add-hook 'emacs-lisp-mode-hook #'handle-ts-mode)
+(add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'eglot-format-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
