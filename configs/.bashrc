@@ -1,7 +1,6 @@
 #!/bin/bash
 
 export PATH="~/.local/bin:~/.local/share/fnm:$PATH"
-export LSP_USE_PLISTS=true
 eval "`fnm env`"
 
 # If not running interactively, don't do anything

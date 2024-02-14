@@ -3,11 +3,8 @@
 (package-initialize)
 
 (use-package helm :ensure t)
-(use-package helm-lsp :ensure t)
 (use-package helm-xref :ensure t)
 (use-package yasnippet :ensure t)
-(use-package flycheck :ensure t)
-(use-package lsp-mode :ensure t)
 (use-package company :ensure t)
 (use-package treesit-auto
   :ensure t
@@ -39,21 +36,18 @@
 	      :source-dir "typescript/src"
 	      :ext "\\.ts\\'"))
 
-(defun run-company ()
+(defun handle-ts-mode ()
+  (eglot-ensure)
   (company-mode 1)
   (yas-minor-mode)
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
 
-(defun handle-ts-mode ()
-  (lsp-deferred)
-  (run-company))
-
 (add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
 (add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
 (add-hook 'bash-ts-mode-hook #'handle-ts-mode)
-(add-hook 'emacs-lisp-mode-hook #'run-company)
-(add-hook 'before-save-hook #'lsp-format-buffer)
+(add-hook 'emacs-lisp-mode-hook #'handle-ts-mode)
+(add-hook 'before-save-hook #'eglot-format-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
@@ -78,9 +72,6 @@
  '(company-tooltip-idle-delay 0.2)
  '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
- '(flycheck-check-syntax-automatically '(save mode-enabled))
- '(flycheck-highlighting-mode 'lines)
- '(flycheck-idle-change-delay 0.2)
  '(gc-cons-threshold 1600000)
  '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
@@ -89,16 +80,12 @@
  '(ispell-dictionary nil)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
- '(lsp-diagnostics-provider :flycheck)
- '(lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
- '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
  '(message-log-max nil)
  '(package-selected-packages
-   '(flycheck yasnippet treesit-auto pkg-info langtool helm-xref helm-lsp company))
+   '(yasnippet treesit-auto pkg-info langtool helm-xref company))
  '(standard-indent 2)
- '(treesit-font-lock-level 4)
- '(warning-minimum-level :error))
+ '(treesit-font-lock-level 4))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
