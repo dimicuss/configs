@@ -2,6 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
 (use-package yasnippet :ensure t)
@@ -13,6 +14,7 @@
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+
 
 (add-to-list 'treesit-auto-recipe-list
              (make-treesit-auto-recipe
@@ -38,17 +40,32 @@
 
 (defun setup-company ()
   (company-mode 1)
-  (yas-minor-mode)
+  (yas-minor-mode 1)
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
 
-(defun handle-ts-mode ()
+(defun launch-ide ()
   (eglot-ensure)
   (setup-company))
 
-(add-hook 'tsx-ts-mode-hook #'handle-ts-mode)
-(add-hook 'typescript-ts-mode-hook #'handle-ts-mode)
-(add-hook 'bash-ts-mode-hook #'handle-ts-mode)
+(defun launch-typescript-ide ()
+  (setq-default eglot-workspace-configuration
+              '(:typescript (:format (:indentSize 2
+                                      :convertTabsToSpaces t
+                                      :tabSize  2
+                                      :insertSpaceAfterConstructor nil
+                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
+                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
+                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
+                                      :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
+                                      :insertSpaceBeforeFunctionParenthesis nil
+                                      :insertSpaceBeforeTypeAnnotation nil))))
+  (eglot-ensure)
+  (setup-company))
+
+(add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
+(add-hook 'typescript-ts-mode-hook #'launch-typescript-ide)
+(add-hook 'bash-ts-mode-hook #'launch-ide)
 (add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'eglot-format-buffer)
 
@@ -56,13 +73,13 @@
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 
-(helm-mode 1)
 (yas-reload-all)
-(savehist-mode 1)
-(desktop-save-mode 1)
 (push '(company-semantic :with company-yasnippet) company-backends)
 
-(setq read-process-output-max (* 1024 1024))
+(helm-mode 1)
+(savehist-mode 1)
+(tab-bar-mode 1)
+(desktop-save-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -75,7 +92,9 @@
  '(company-tooltip-idle-delay 0.2)
  '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
- '(gc-cons-threshold 1600000)
+ '(display-line-numbers t)
+ '(eglot-events-buffer-size 0)
+ '(eglot-send-changes-idle-time 0.2)
  '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
