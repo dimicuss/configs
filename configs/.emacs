@@ -93,6 +93,7 @@
  '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
  '(display-line-numbers t)
+ '(eglot-autoshutdown t)
  '(eglot-events-buffer-size 0)
  '(eglot-send-changes-idle-time 0.2)
  '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
