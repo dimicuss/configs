@@ -2,6 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package flymake-eslint :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -14,7 +15,6 @@
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
-
 
 (add-to-list 'treesit-auto-recipe-list
              (make-treesit-auto-recipe
@@ -49,17 +49,22 @@
   (setup-company))
 
 (defun launch-typescript-ide ()
-  (setq-default eglot-workspace-configuration
-              '(:typescript (:format (:indentSize 2
-                                      :convertTabsToSpaces t
-                                      :tabSize  2
-                                      :insertSpaceAfterConstructor nil
-                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
-                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
-                                      :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
-                                      :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
-                                      :insertSpaceBeforeFunctionParenthesis nil
-                                      :insertSpaceBeforeTypeAnnotation nil))))
+  (setq ts-js-rules '(:format (:indentSize 2
+                               :convertTabsToSpaces t
+                               :tabSize  2
+                               :insertSpaceAfterConstructor nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
+                               :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
+                               :insertSpaceBeforeFunctionParenthesis nil
+                               :insertSpaceBeforeTypeAnnotation nil)))
+  
+  (setq base-dir (locate-dominating-file (buffer-file-name) "tsconfig.json"))
+  (setq-default eglot-workspace-configuration `(:typescript ,ts-js-rules :javascript ,ts-js-rules))
+  (setq-local flymake-eslint-project-root base-dir)
+  
+  (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable)
   (eglot-ensure)
   (setup-company))
 
@@ -94,8 +99,8 @@
  '(desktop-save-mode t)
  '(display-line-numbers t)
  '(eglot-autoshutdown t)
- '(eglot-events-buffer-size 0)
  '(eglot-send-changes-idle-time 0.2)
+ '(flymake-eslint-prefer-json-diagnostics nil)
  '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
@@ -105,8 +110,7 @@
  '(js-jsx-indent-level 2)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages
-   '(yasnippet treesit-auto pkg-info langtool helm-xref company))
+ '(package-selected-packages nil)
  '(standard-indent 2)
  '(treesit-font-lock-level 4))
  
