@@ -37,7 +37,7 @@ function join-commands {
 
 function prompt_command {
     local extension="$(join-commands get-branch "get-code $?")"
-    PS1="\[\e[93m\][\[\e[96m\]\u\[\e[93m\](λ)\[\e[96m\]\h \[\e[92m\]\W\[\e[93m\]]\[\e[93m\] $extension\n\[\e[93m\]\\\$ \[\e[92m\]>> \[\e[0m\]"
+    PS1="\[\e[93m\][\[\e[96m\]\u\[\e[93m\](λ)\[\e[96m\]\h \[\e[92m\]\w\[\e[93m\]]\[\e[93m\] $extension\n\[\e[93m\]\\\$ \[\e[92m\]>> \[\e[0m\]"
 }
 
 PROMPT_COMMAND='prompt_command'
