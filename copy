@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INITIAL_DIR="$(pwd)"
-CONFIGS_DIR="$INITIAL_DIR/configs"
+CONFIGS_DIR="$INITIAL_DIR/src"
 
 if [[ -d "$CONFIGS_DIR" ]]; then
     cd "$CONFIGS_DIR"
