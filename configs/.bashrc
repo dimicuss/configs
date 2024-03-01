@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export PATH="~/.local/bin:~/.local/share/fnm:$PATH"
-eval "`fnm env`"
+which fnm &> /dev/null && eval "`fnm env`"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
