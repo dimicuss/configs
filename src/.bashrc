@@ -15,6 +15,10 @@ alias vp_off='sudo systemctl stop openvpn-client@client'
 alias gp='git pull && git push'
 alias grep='grep --color=auto'
 
+function get-top-level {
+    git rev-parse --show-toplevel 2> /dev/null | sed -E 's~.*\/(.*)$~(Top level: \1)~'
+}
+
 function get-branch {
     git rev-parse --abbrev-ref HEAD 2> /dev/null | sed -E 's~(.*)~(Branch: \1)~'
 }
@@ -36,8 +40,8 @@ function join-commands {
 }
 
 function prompt_command {
-    local extension="$(join-commands get-branch "get-code $?")"
-    PS1="\[\e[93m\][\[\e[96m\]\u\[\e[93m\](λ)\[\e[96m\]\h \[\e[92m\]\w\[\e[93m\]]\[\e[93m\] $extension\n\[\e[93m\]\\\$ \[\e[92m\]>> \[\e[0m\]"
+    local extension="$(join-commands get-top-level get-branch "get-code $?")"
+    PS1="\[\e[93m\][\[\e[94m\]\u\[\e[93m\](λ)\[\e[94m\]\h \[\e[36m\]\W\[\e[93m\]]\[\e[93m\] $extension\n\[\e[93m\]\\\$ \[\e[92m\]>> \[\e[0m\]"
 }
 
 PROMPT_COMMAND='prompt_command'
