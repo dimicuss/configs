@@ -1,7 +1,15 @@
 #!/bin/bash
 
 export PATH="~/.local/bin:~/.local/share/fnm:$PATH"
-which fnm &> /dev/null && eval "`fnm env`"
+type fnm &> /dev/null && eval "`fnm env`"
+type npm &> /dev/null && echo 'prefix = ~/.local' > ~/.npmrc
+
+if type git &> /dev/null
+then
+    echo 'feat(frontend): , ref #' > ~/.gitmessage
+    git config --global core.editor "emacs -Q"
+    git config --global commit.template ~/.gitmessage
+fi
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
@@ -13,6 +21,7 @@ alias vp_on='sudo systemctl start openvpn-client@client'
 alias vp_st='sudo systemctl status openvpn-client@client'
 alias vp_off='sudo systemctl stop openvpn-client@client'
 alias gp='git pull && git push'
+alias gac='git add "$(git rev-parse --show-toplevel)" && git commit'
 alias grep='grep --color=auto'
 
 function get-top-level {
@@ -46,4 +55,3 @@ function prompt_command {
 
 PROMPT_COMMAND='prompt_command'
 
-echo 'feat(frontend): , ref #' > ~/.gitmessage
