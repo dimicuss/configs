@@ -14,6 +14,8 @@ fi
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+[ -f /etc/profile.d/bash_completion.sh ] && source /etc/profile.d/bash_completion.sh
+
 alias ls='ls --color=auto'
 alias ll='ls -lA'
 alias cd='cd -P'
@@ -54,4 +56,5 @@ function prompt_command {
 }
 
 PROMPT_COMMAND='prompt_command'
+
 
