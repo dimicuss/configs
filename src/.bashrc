@@ -1,14 +1,15 @@
 #!/bin/bash
 
-export NVM_DIR="$HOME/.nvm"
 export PATH="~/.yarn/bin:$PATH"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 if type nvm &> /dev/null
 then
-    echo "lts/*" > ~/.nvmrc
-    nvm use
+    [ ! -f ~/.nvmrc ] && echo "lts/*" > ~/.nvmrc
+    nvm install &> /dev/null
+    nvm use &> /dev/null
 fi
 
 if type git &> /dev/null

@@ -46,6 +46,7 @@
 
 (defun launch-ide ()
   (eglot-ensure)
+  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))
   (setup-company))
 
 (defun launch-typescript-ide ()
