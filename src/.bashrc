@@ -1,13 +1,22 @@
 #!/bin/bash
 
-export PATH="~/.local/bin:~/.local/share/fnm:$PATH"
-type fnm &> /dev/null && eval "`fnm env`"
-type npm &> /dev/null && echo 'prefix = ~/.local' > ~/.npmrc
+export NVM_DIR="$HOME/.nvm"
+export PATH="~/.yarn/bin:$PATH"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+if type nvm &> /dev/null
+then
+    echo "lts/*" > ~/.nvmrc
+    nvm use
+fi
 
 if type git &> /dev/null
 then
-    echo 'feat(frontend): , ref #' > ~/.gitmessage
+    git config --global user.email "dimicuss@gmail.com"
+    git config --global user.name "dimicuss"
     git config --global core.editor "emacs -Q"
+    echo 'feat(frontend): , ref #' > ~/.gitmessage    
     git config --global commit.template ~/.gitmessage
 fi
 
@@ -56,5 +65,4 @@ function prompt_command {
 }
 
 PROMPT_COMMAND='prompt_command'
-
 

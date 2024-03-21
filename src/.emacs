@@ -61,13 +61,15 @@
                                :insertSpaceBeforeTypeAnnotation nil)))
   
   (setq base-dir (locate-dominating-file (buffer-file-name) "tsconfig.json"))
-  (setq-default eglot-workspace-configuration `(:typescript ,ts-js-rules :javascript ,ts-js-rules))
+  (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules))
   (setq-local flymake-eslint-project-root base-dir)
   
   (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable)
   (eglot-ensure)
+  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))
   (setup-company))
 
+(add-hook 'js-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'typescript-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'bash-ts-mode-hook #'launch-ide)
