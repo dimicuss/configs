@@ -24,7 +24,8 @@ fi
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-[ -f /etc/profile.d/bash_completion.sh ] && source /etc/profile.d/bash_completion.sh
+autocomp=/usr/share/bash-completion/bash_completion
+[ -f $autocomp ] && source $autocomp
 
 alias ls='ls --color=auto'
 alias ll='ls -lA'
@@ -58,6 +59,34 @@ function join-commands {
         [ -n "$result" ] && echo -n "$result$postfix"
         i=$((i + 1))
     done
+}
+
+function replace {
+    local OPTIND p s d=0
+    while getopts 'dp:s:' key
+    do
+        case "$key" in
+            p) p="$OPTARG" ;;
+            s) s="$OPTARG" ;;
+            d) d=1 ;;
+            *) exit 1 ;;
+        esac
+    done
+    
+    shift $((OPTIND - 1))
+
+    if ((d == 1))
+    then
+        grep -l -Z -E $p -r $@ | xargs -0 sed -i -E "s~$p~$s~"
+    else
+        grep -E $p -r $@ | while read match
+        do
+            echo
+            echo "File: $(echo "$match" | cut -d : -f1)"
+            echo "Initial: $(echo "$match" | cut -d : -f2-)"
+            echo "Repalced: $(echo "$match" | cut -d : -f2- | sed -E "s~$p~$s~")"
+        done        
+    fi    
 }
 
 function prompt_command {
