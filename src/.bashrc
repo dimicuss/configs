@@ -61,7 +61,7 @@ function join-commands {
     done
 }
 
-function replace {
+function rpls {
     local OPTIND p s d=0
     while getopts 'dp:s:' key
     do
@@ -69,7 +69,7 @@ function replace {
             p) p="$OPTARG" ;;
             s) s="$OPTARG" ;;
             d) d=1 ;;
-            *) exit 1 ;;
+            *) return ;;
         esac
     done
     
@@ -77,14 +77,14 @@ function replace {
 
     if ((d == 1))
     then
-        grep -l -Z -E $p -r $@ | xargs -0 sed -i -E "s~$p~$s~"
+        grep -l -Z -E "$p" -r $@ | xargs -0 sed -i -E "s~$p~$s~"
     else
-        grep -E $p -r $@ | while read match
+        grep -H -E "$p" -r $@ | while read match
         do
-            echo
-            echo "File: $(echo "$match" | cut -d : -f1)"
-            echo "Initial: $(echo "$match" | cut -d : -f2-)"
-            echo "Repalced: $(echo "$match" | cut -d : -f2- | sed -E "s~$p~$s~")"
+            echo           
+            echo "File: $(echo "$match" | cut -d : -f1)"            
+            echo "Match: $(echo "$match" | cut -d : -f2-)"            
+            [ ! -z $s ] && echo "Replacing: $(echo "$match" | cut -d : -f2- | sed -E "s~$p~$s~")"
         done        
     fi    
 }
