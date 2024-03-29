@@ -8,8 +8,11 @@ export NVM_DIR="$HOME/.nvm"
 if type nvm &> /dev/null
 then
     [ ! -f ~/.nvmrc ] && echo "lts/*" > ~/.nvmrc
-    nvm install &> /dev/null
-    nvm use &> /dev/null
+    if ! type node &> /dev/null
+    then
+        nvm install &> /dev/null
+        nvm use &> /dev/null
+    fi
 fi
 
 if type git &> /dev/null
@@ -17,8 +20,8 @@ then
     git config --global user.email "dimicuss@gmail.com"
     git config --global user.name "dimicuss"
     git config --global core.editor "emacs -Q"
-    echo 'feat(frontend): , ref #' > ~/.gitmessage    
     git config --global commit.template ~/.gitmessage
+    echo 'feat(frontend): ; ref #' > ~/.gitmessage    
 fi
 
 # If not running interactively, don't do anything
@@ -87,6 +90,25 @@ function rpls {
             [ ! -z $s ] && echo "Replacing: $(echo "$match" | cut -d : -f2- | sed -E "s~$p~$s~")"
         done        
     fi    
+}
+
+function rnm-sngl-indx {
+    local original_dir=$(pwd)
+    find $@ -regextype posix-extended -regex '^.*index(\.[[:alnum:]]+)?$' | while read path
+    do
+        local index_real_path=$(realpath "$path")
+        local index_dir=$(dirname "$index_real_path")
+        if (($(ls -A "$index_dir" | wc -w) == 1))
+        then
+            local bn=$(basename "$index_real_path")
+            local ext=$(echo "$index_real_path" | sed -E 's~.*(\..+)~\1~')
+            local temp_filename="$index_dir$ext~temp"
+            mv "$index_real_path" "$temp_filename"
+            rmdir "$index_dir"
+            mv "$temp_filename" "$index_dir$ext"
+        fi
+    done
+    cd "$original_dir"
 }
 
 function prompt_command {
