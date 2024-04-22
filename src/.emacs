@@ -46,7 +46,6 @@
 
 (defun launch-ide ()
   (eglot-ensure)
-  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))
   (setup-company))
 
 (defun launch-typescript-ide ()
@@ -64,11 +63,11 @@
   (setq base-dir (locate-dominating-file (buffer-file-name) "tsconfig.json"))
   (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules))
   (setq-local flymake-eslint-project-root base-dir)
-  
+
+  (setup-company)
   (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable)
   (eglot-ensure)
-  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))
-  (setup-company))
+  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose)))
 
 (add-hook 'js-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
@@ -98,6 +97,7 @@
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
+ '(css-indent-offset 2)
  '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
  '(display-line-numbers t)
@@ -113,7 +113,8 @@
  '(js-jsx-indent-level 2)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
  '(standard-indent 2)
  '(treesit-font-lock-level 4))
  

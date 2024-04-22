@@ -94,7 +94,7 @@ function rpls {
 
 function rnm-sngl-indx {
     local original_dir=$(pwd)
-    find $@ -regextype posix-extended -regex '^.*index(\.[[:alnum:]]+)?$' | while read path
+    find $@ -regextype posix-extended -regex '^.*index(\..+)?$' | while read path
     do
         local index_real_path=$(realpath "$path")
         local index_dir=$(dirname "$index_real_path")
