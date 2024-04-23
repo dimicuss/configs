@@ -27,6 +27,9 @@ fi
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+bind 'set show-all-if-ambiguous on'
+bind 'TAB:menu-complete'
+
 autocomp=/usr/share/bash-completion/bash_completion
 [ -f $autocomp ] && source $autocomp
 
