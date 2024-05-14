@@ -2,7 +2,6 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(use-package flymake-eslint :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -63,11 +62,15 @@
   (setq base-dir (locate-dominating-file (buffer-file-name) "tsconfig.json"))
   (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules))
   (setq-local flymake-eslint-project-root base-dir)
-
+  
+  (add-hook 'eglot-managed-mode-hook (lambda ()
+                                       (flymake-eslint-enable)
+                                       (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))))
+  
+  
   (setup-company)
-  (add-hook 'eglot-managed-mode-hook #'flymake-eslint-enable)
-  (eglot-ensure)
-  (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose)))
+  (eglot-ensure))
+
 
 (add-hook 'js-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
@@ -79,6 +82,7 @@
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 
 (yas-reload-all)
 (push '(company-semantic :with company-yasnippet) company-backends)

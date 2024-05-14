@@ -108,11 +108,21 @@ function rnm-sngl-indx {
             local temp_filename="$index_dir$ext~temp"
             mv "$index_real_path" "$temp_filename"
             rmdir "$index_dir"
-            mv "$temp_filename" "$index_dir$ext"
+            mv -T "$temp_filename" "$index_dir$ext"
         fi
     done
     cd "$original_dir"
 }
+
+function snkfy {
+    find ./src ./pages -type f -regextype posix-extended -regex '.*[[:lower:]]+[[:upper:]]+.*' | while read path
+    do
+        local target_pathname="$(echo "$path" | sed -r 's/([[:lower:]])([[:upper:]])/\1_\L\2/g')"
+        mkdir -p "$(dirname "$target_pathname")"
+        mv "$path" "$target_pathname"
+    done
+}
+
 
 function prompt_command {
     local extension="$(join-commands get-top-level get-branch "get-code $?")"
