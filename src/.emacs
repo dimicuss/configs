@@ -67,7 +67,6 @@
                                        (flymake-eslint-enable)
                                        (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))))
   
-  
   (setup-company)
   (eglot-ensure))
 
@@ -101,6 +100,7 @@
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
+ '(company-transformers '(company-sort-by-occurrence))
  '(css-indent-offset 2)
  '(custom-enabled-themes '(wombat))
  '(desktop-save-mode t)
