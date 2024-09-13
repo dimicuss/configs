@@ -2,6 +2,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package flymake-eslint :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
