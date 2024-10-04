@@ -1,9 +1,8 @@
 (require 'package)
+(require 'flyspell)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(use-package flymake-eslint :ensure t)
-(use-package flycheck-aspell :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -45,11 +44,10 @@
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
 
-(defun launch-ide (&rest args)
+(defun launch-ide ()
   (eglot-ensure)
-  (setup-company)
-  (flymake-aspell-setup)
-  (flyspell-mode))
+  (turn-on-flyspell)
+  (setup-company))
 
 (defun launch-typescript-ide ()
   (setq ts-js-rules '(:format (:indentSize 2
@@ -71,8 +69,11 @@
                                        (flymake-eslint-enable)
                                        (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))))
   
-  (setup-company)
-  (eglot-ensure))
+  (launch-ide))
+
+(defun flyspell-local-vars ()
+  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
+
 
 (add-hook 'c-ts-mode-hook #'launch-ide)
 (add-hook 'js-ts-mode-hook #'launch-typescript-ide)
@@ -81,19 +82,20 @@
 (add-hook 'bash-ts-mode-hook #'launch-ide)
 (add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'eglot-format-buffer)
+(add-hook 'flyspell-mode-hook #'flyspell-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
 
+
 (yas-reload-all)
 (push '(company-semantic :with company-yasnippet) company-backends)
 
-(helm-mode 1)
-(savehist-mode 1)
-(tab-bar-mode 1)
-(desktop-save-mode 1)
+(helm-mode +1)
+(savehist-mode +1)
+(desktop-save-mode +1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
