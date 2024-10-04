@@ -1,8 +1,8 @@
 (require 'package)
-(require 'flyspell)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package wucuo :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -45,8 +45,8 @@
        '((company-dabbrev-code company-yasnippet))))
 
 (defun launch-ide ()
+  (wucuo-start)
   (eglot-ensure)
-  (turn-on-flyspell)
   (setup-company))
 
 (defun launch-typescript-ide ()
@@ -82,7 +82,6 @@
 (add-hook 'bash-ts-mode-hook #'launch-ide)
 (add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'eglot-format-buffer)
-(add-hook 'flyspell-mode-hook #'flyspell-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
@@ -118,6 +117,10 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
+ '(ispell-dictionary "en")
+ '(ispell-extra-args '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"))
+ '(ispell-program-name "aspell")
+ '(ispell-silently-savep t)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
  '(make-backup-files nil)
@@ -125,9 +128,6 @@
  '(package-selected-packages
    '(eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
  '(standard-indent 2)
- '(ispell-dictionary "en")
- '(ispell-program-name "aspell")
- '(ispell-silently-savep t)
  '(treesit-font-lock-level 4))
  
 (custom-set-faces
