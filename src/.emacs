@@ -3,6 +3,7 @@
 (package-initialize)
 
 (use-package flymake-eslint :ensure t)
+(use-package flycheck-aspell :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -44,9 +45,11 @@
   (set (make-local-variable 'company-backends)
        '((company-dabbrev-code company-yasnippet))))
 
-(defun launch-ide ()
+(defun launch-ide (&rest args)
   (eglot-ensure)
-  (setup-company))
+  (setup-company)
+  (flymake-aspell-setup)
+  (flyspell-mode))
 
 (defun launch-typescript-ide ()
   (setq ts-js-rules '(:format (:indentSize 2
@@ -71,7 +74,7 @@
   (setup-company)
   (eglot-ensure))
 
-
+(add-hook 'c-ts-mode-hook #'launch-ide)
 (add-hook 'js-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
 (add-hook 'typescript-ts-mode-hook #'launch-typescript-ide)
@@ -113,7 +116,6 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(ispell-dictionary nil)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
  '(make-backup-files nil)
@@ -121,6 +123,9 @@
  '(package-selected-packages
    '(eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
  '(standard-indent 2)
+ '(ispell-dictionary "en")
+ '(ispell-program-name "aspell")
+ '(ispell-silently-savep t)
  '(treesit-font-lock-level 4))
  
 (custom-set-faces
