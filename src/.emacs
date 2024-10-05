@@ -45,6 +45,7 @@
        '((company-dabbrev-code company-yasnippet))))
 
 (defun launch-ide ()
+  (subword-mode +1)
   (wucuo-start)
   (eglot-ensure)
   (setup-company))
