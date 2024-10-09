@@ -1,7 +1,9 @@
 (require 'package)
+(require 'autorevert)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package flymake-eslint :ensure t)
 (use-package wucuo :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
@@ -16,28 +18,6 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(add-to-list 'treesit-auto-recipe-list
-             (make-treesit-auto-recipe
-	      :lang 'tsx
-	      :ts-mode 'tsx-ts-mode
-	      :remap '(typescript-tsx-mode)
-	      :requires 'typescript
-	      :url "https://github.com/tree-sitter/tree-sitter-typescript"
-	      :revision "v0.20.3"
-	      :source-dir "tsx/src"
-	      :ext "\\.tsx\\'"))
-
-(add-to-list 'treesit-auto-recipe-list
-             (make-treesit-auto-recipe
-	      :lang 'typescript	       
-	      :ts-mode 'typescript-ts-mode
-	      :remap 'typescript-mode
-	      :requires 'tsx
-	      :url "https://github.com/tree-sitter/tree-sitter-typescript"
-	      :revision "v0.20.3"
-	      :source-dir "typescript/src"
-	      :ext "\\.ts\\'"))
-
 (defun setup-company ()
   (company-mode 1)
   (yas-minor-mode 1)
@@ -45,44 +25,28 @@
        '((company-dabbrev-code company-yasnippet))))
 
 (defun launch-ide ()
+  (auto-revert-mode +1)
   (subword-mode +1)
   (wucuo-start)
   (eglot-ensure)
   (setup-company))
 
-(defun launch-typescript-ide ()
-  (setq ts-js-rules '(:format (:indentSize 2
-                               :convertTabsToSpaces t
-                               :tabSize  2
-                               :insertSpaceAfterConstructor nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
-                               :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
-                               :insertSpaceBeforeFunctionParenthesis nil
-                               :insertSpaceBeforeTypeAnnotation nil)))
-  
-  (setq base-dir (locate-dominating-file (buffer-file-name) "tsconfig.json"))
-  (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules))
-  (setq-local flymake-eslint-project-root base-dir)
-  
-  (add-hook 'eglot-managed-mode-hook (lambda ()
-                                       (flymake-eslint-enable)
-                                       (eglot-signal-didChangeConfiguration (eglot--current-server-or-lose))))
-  
-  (launch-ide))
-
-(defun flyspell-local-vars ()
-  (add-hook 'hack-local-variables-hook #'flyspell-buffer))
-
+(defun setup-eslint ()
+  (when (or
+         (eq major-mode 'js-ts-mode)
+         (eq major-mode 'tsx-ts-mode)
+         (eq major-mode 'typescript-ts-mode))
+   (flymake-eslint-enable)))
 
 (add-hook 'c-ts-mode-hook #'launch-ide)
-(add-hook 'js-ts-mode-hook #'launch-typescript-ide)
-(add-hook 'tsx-ts-mode-hook #'launch-typescript-ide)
-(add-hook 'typescript-ts-mode-hook #'launch-typescript-ide)
+(add-hook 'js-ts-mode-hook #'launch-ide)
+(add-hook 'tsx-ts-mode-hook #'launch-ide)
+(add-hook 'typescript-ts-mode-hook #'launch-ide)
 (add-hook 'bash-ts-mode-hook #'launch-ide)
+(add-hook 'eglot-managed-mode-hook #'setup-eslint)
 (add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'eglot-format-buffer)
+(add-hook 'eglot-server-initialized-hook #'eglot-signal-didChangeConfiguration)
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
@@ -96,13 +60,28 @@
 (helm-mode +1)
 (savehist-mode +1)
 (desktop-save-mode +1)
+(auto-save-mode +1)
+
+(with-eval-after-load 'eglot
+  (setq ts-js-rules '(:format (:indentSize 2
+                               :convertTabsToSpaces t
+                               :tabSize  2
+                               :insertSpaceAfterConstructor nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
+                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
+                               :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
+                               :insertSpaceBeforeFunctionParenthesis nil
+                               :insertSpaceBeforeTypeAnnotation nil)))
+  (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(auto-save-default nil)
+ '(auto-save-interval 1)
+ '(auto-save-timeout 3)
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
@@ -119,7 +98,8 @@
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
  '(ispell-dictionary "en")
- '(ispell-extra-args '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"))
+ '(ispell-extra-args
+   '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"))
  '(ispell-program-name "aspell")
  '(ispell-silently-savep t)
  '(js-indent-level 2)
@@ -127,7 +107,7 @@
  '(make-backup-files nil)
  '(message-log-max nil)
  '(package-selected-packages
-   '(eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
+   '(wucuo eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
  '(standard-indent 2)
  '(treesit-font-lock-level 4))
  
