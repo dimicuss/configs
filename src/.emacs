@@ -60,6 +60,7 @@
 (helm-mode +1)
 (savehist-mode +1)
 (desktop-save-mode +1)
+(electric-indent-mode -1)
 
 (with-eval-after-load 'eglot
   (setq ts-js-rules '(:format (:indentSize 2
@@ -80,16 +81,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-save-default nil)
- '(auto-save-interval 1)
- '(auto-save-timeout 1)
- '(auto-save-visited-interval 1)
+ '(auto-save-visited-interval 3)
  '(auto-save-visited-mode t)
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
  '(company-transformers '(company-sort-by-occurrence))
  '(css-indent-offset 2)
- '(custom-enabled-themes '(wombat))
+ '(custom-enabled-themes '(leuven-dark))
  '(desktop-save-mode t)
  '(display-line-numbers t)
  '(eglot-autoshutdown t)
