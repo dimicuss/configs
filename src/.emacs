@@ -18,6 +18,21 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
+(use-package web-mode
+  :ensure t
+  :mode
+  (("\\.html\\'" . web-mode)
+   ("\\.phtml\\'" . web-mode)
+   ("\\.php\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)))
+
+
+
 (defun setup-company ()
   (company-mode 1)
   (yas-minor-mode 1)
@@ -88,7 +103,7 @@
  '(company-tooltip-idle-delay 0.2)
  '(company-transformers '(company-sort-by-occurrence))
  '(css-indent-offset 2)
- '(custom-enabled-themes '(leuven-dark))
+ '(custom-enabled-themes '(modus-vivendi))
  '(desktop-save-mode t)
  '(display-line-numbers t)
  '(eglot-autoshutdown t)
@@ -110,7 +125,10 @@
  '(package-selected-packages
    '(wucuo eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
  '(standard-indent 2)
- '(treesit-font-lock-level 4))
+ '(treesit-font-lock-level 4)
+ '(web-mode-enable-auto-pairing t)
+ '(web-mode-enable-current-column-highlight t)
+ '(web-mode-enable-current-element-highlight t))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
