@@ -1,9 +1,8 @@
 #!/bin/bash
-
-export PATH="~/.yarn/bin:$PATH"
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export PATH=~/.yarn/bin:$PATH
+export NVM_DIR=$HOME/.nvm
+[ -s $NVM_DIR/nvm.sh ] && source $NVM_DIR/nvm.sh
+[ -s $NVM_DIR/bash_completion ] && source $NVM_DIR/bash_completion
 
 if type nvm &> /dev/null
 then
@@ -32,6 +31,13 @@ bind 'TAB:menu-complete'
 
 autocomp=/usr/share/bash-completion/bash_completion
 [ -f $autocomp ] && source $autocomp
+
+alias_path=~/.bash_aliases
+[ -f $alias_path ] && source $alias_path
+
+export PYENV_ROOT="$HOME/.pyenv"
+[ -d $PYENV_ROOT/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - bash)"
 
 alias ls='ls --color=auto'
 alias ll='ls -lA'
