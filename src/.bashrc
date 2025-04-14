@@ -23,6 +23,13 @@ then
     echo 'feat(frontend): ; ref #' > ~/.gitmessage    
 fi
 
+if type pyenv &> /dev/null
+then      
+    export PYENV_ROOT="$HOME/.pyenv"
+    [ -d $PYENV_ROOT/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init - bash)"
+fi
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
@@ -34,10 +41,6 @@ autocomp=/usr/share/bash-completion/bash_completion
 
 alias_path=~/.bash_aliases
 [ -f $alias_path ] && source $alias_path
-
-export PYENV_ROOT="$HOME/.pyenv"
-[ -d $PYENV_ROOT/bin ] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - bash)"
 
 alias ls='ls --color=auto'
 alias ll='ls -lA'
