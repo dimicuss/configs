@@ -53,6 +53,8 @@
          (eq major-mode 'typescript-ts-mode))
    (flymake-eslint-enable)))
 
+(add-hook 'css-ts-mode-hook #'launch-ide)
+(add-hook 'scss-mode-hook #'launch-ide)
 (add-hook 'c-ts-mode-hook #'launch-ide)
 (add-hook 'js-ts-mode-hook #'launch-ide)
 (add-hook 'tsx-ts-mode-hook #'launch-ide)
@@ -101,7 +103,10 @@
  '(company-idle-delay 0.2)
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
- '(company-transformers '(company-sort-by-occurrence))
+ '(company-transformers '(company-sort-by-backend-importance))
+ '(completion-styles
+   '(basic partial-completion substring eglot--dumb-flex shorthand))
+ '(completions-sort 'historical)
  '(css-indent-offset 2)
  '(custom-enabled-themes '(modus-vivendi))
  '(desktop-save-mode t)
@@ -122,8 +127,7 @@
  '(js-jsx-indent-level 2)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages
-   '(wucuo eglot yasnippet treesit-auto markdown-mode helm-xref flymake-eslint company))
+ '(package-selected-packages nil)
  '(standard-indent 2)
  '(treesit-font-lock-level 4)
  '(web-mode-enable-auto-pairing t)

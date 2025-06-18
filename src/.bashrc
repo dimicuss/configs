@@ -42,7 +42,7 @@ autocomp=/usr/share/bash-completion/bash_completion
 alias_path=~/.bash_aliases
 [ -f $alias_path ] && source $alias_path
 
-alias ls='ls --color=auto'
+alias ls='ls --color=auto --group-directories-first'
 alias ll='ls -lA'
 alias cd='cd -P'
 alias vp_on='sudo systemctl start openvpn-client@client'
