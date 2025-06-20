@@ -80,6 +80,9 @@
 (electric-indent-mode -1)
 
 (with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(scss-mode . ("some-sass-language-server" "--stdio")))
+
   (setq ts-js-rules '(:format (:indentSize 2
                                :convertTabsToSpaces t
                                :tabSize  2
@@ -120,7 +123,8 @@
  '(initial-scratch-message nil)
  '(ispell-dictionary "en")
  '(ispell-extra-args
-   '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"))
+   '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"
+     "--camel-case"))
  '(ispell-program-name "aspell")
  '(ispell-silently-savep t)
  '(js-indent-level 2)
@@ -132,7 +136,8 @@
  '(treesit-font-lock-level 4)
  '(web-mode-enable-auto-pairing t)
  '(web-mode-enable-current-column-highlight t)
- '(web-mode-enable-current-element-highlight t))
+ '(web-mode-enable-current-element-highlight t)
+ '(wucuo-enable-camel-case-algorithm-p t))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
