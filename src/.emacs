@@ -4,7 +4,6 @@
 (package-initialize)
 
 (use-package flymake-eslint :ensure t)
-(use-package wucuo :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -42,7 +41,7 @@
 (defun launch-ide ()
   (auto-revert-mode +1)
   (subword-mode +1)
-  (wucuo-start)
+  (flyspell-mode +1)
   (eglot-ensure)
   (setup-company))
 
@@ -111,7 +110,7 @@
    '(basic partial-completion substring eglot--dumb-flex shorthand))
  '(completions-sort 'historical)
  '(css-indent-offset 2)
- '(custom-enabled-themes '(modus-vivendi))
+ '(custom-enabled-themes '(misterioso))
  '(desktop-save-mode t)
  '(display-line-numbers t)
  '(eglot-autoshutdown t)
