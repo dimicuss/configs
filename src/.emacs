@@ -3,12 +3,13 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(use-package flymake-eslint :ensure t)
+(use-package wucuo :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
 (use-package yasnippet :ensure t)
 (use-package company :ensure t)
+(use-package lsp-mode :ensure t)
 (use-package treesit-auto
   :ensure t
   :custom
@@ -30,8 +31,6 @@
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)))
 
-
-
 (defun setup-company ()
   (company-mode 1)
   (yas-minor-mode 1)
@@ -39,18 +38,11 @@
        '((company-dabbrev-code company-yasnippet))))
 
 (defun launch-ide ()
+  (wucuo-mode +1)
   (auto-revert-mode +1)
   (subword-mode +1)
-  (flyspell-mode +1)
-  (eglot-ensure)
+  (lsp-mode +1)
   (setup-company))
-
-(defun setup-eslint ()
-  (when (or
-         (eq major-mode 'js-ts-mode)
-         (eq major-mode 'tsx-ts-mode)
-         (eq major-mode 'typescript-ts-mode))
-   (flymake-eslint-enable)))
 
 (add-hook 'css-ts-mode-hook #'launch-ide)
 (add-hook 'scss-mode-hook #'launch-ide)
@@ -59,10 +51,8 @@
 (add-hook 'tsx-ts-mode-hook #'launch-ide)
 (add-hook 'typescript-ts-mode-hook #'launch-ide)
 (add-hook 'bash-ts-mode-hook #'launch-ide)
-(add-hook 'eglot-managed-mode-hook #'setup-eslint)
 (add-hook 'emacs-lisp-mode-hook #'setup-company)
-(add-hook 'before-save-hook #'eglot-format-buffer)
-(add-hook 'eglot-server-initialized-hook #'eglot-signal-didChangeConfiguration)
+(add-hook 'before-save-hook #'lsp-format-buffer)
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
@@ -78,22 +68,6 @@
 (desktop-save-mode +1)
 (electric-indent-mode -1)
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               '(scss-mode . ("some-sass-language-server" "--stdio")))
-
-  (setq ts-js-rules '(:format (:indentSize 2
-                               :convertTabsToSpaces t
-                               :tabSize  2
-                               :insertSpaceAfterConstructor nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets nil
-                               :insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis nil
-                               :insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces nil
-                               :insertSpaceBeforeFunctionParenthesis nil
-                               :insertSpaceBeforeTypeAnnotation nil)))
-  (setq-default eglot-workspace-configuration `(:javascript ,ts-js-rules :typescript ,ts-js-rules)))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -106,28 +80,26 @@
  '(company-minimum-prefix-length 1)
  '(company-tooltip-idle-delay 0.2)
  '(company-transformers '(company-sort-by-backend-importance))
- '(completion-styles
-   '(basic partial-completion substring eglot--dumb-flex shorthand))
+ '(completion-styles '(basic partial-completion substring))
  '(completions-sort 'historical)
  '(css-indent-offset 2)
- '(custom-enabled-themes '(misterioso))
+ '(custom-enabled-themes '(modus-vivendi))
  '(desktop-save-mode t)
  '(display-line-numbers t)
- '(eglot-autoshutdown t)
- '(eglot-send-changes-idle-time 0.2)
- '(flymake-eslint-prefer-json-diagnostics nil)
  '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(ispell-dictionary "en")
+ '(ispell-dictionary "english")
  '(ispell-extra-args
    '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"
      "--camel-case"))
- '(ispell-program-name "aspell")
+ '(ispell-program-name "hunspell")
  '(ispell-silently-savep t)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
+ '(lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
+ '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
  '(message-log-max nil)
  '(package-selected-packages nil)
