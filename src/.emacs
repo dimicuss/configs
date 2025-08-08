@@ -3,7 +3,6 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(use-package wucuo :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
 (use-package helm-xref :ensure t)
@@ -38,7 +37,7 @@
        '((company-dabbrev-code company-yasnippet))))
 
 (defun launch-ide ()
-  (wucuo-mode +1)
+  (flyspell-mode +1)
   (auto-revert-mode +1)
   (subword-mode +1)
   (lsp-mode +1)
@@ -58,6 +57,7 @@
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.mts\\'" . typescript-ts-mode))
 
 
 (yas-reload-all)
@@ -90,14 +90,16 @@
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
- '(ispell-dictionary "english")
+ '(ispell-dictionary "en")
  '(ispell-extra-args
    '("--sug-mode=ultra" "--run-together" "--run-together-limit=16"
      "--camel-case"))
- '(ispell-program-name "hunspell")
+ '(ispell-program-name "aspell")
  '(ispell-silently-savep t)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
+ '(lsp-eslint-auto-fix-on-save nil)
+ '(lsp-eslint-run "onSave")
  '(lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
@@ -107,8 +109,7 @@
  '(treesit-font-lock-level 4)
  '(web-mode-enable-auto-pairing t)
  '(web-mode-enable-current-column-highlight t)
- '(web-mode-enable-current-element-highlight t)
- '(wucuo-enable-camel-case-algorithm-p t))
+ '(web-mode-enable-current-element-highlight t))
  
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
