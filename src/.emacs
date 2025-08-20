@@ -98,13 +98,16 @@
  '(ispell-silently-savep t)
  '(js-indent-level 2)
  '(js-jsx-indent-level 2)
- '(lsp-eslint-auto-fix-on-save nil)
+ '(lsp-eldoc-render-all t)
+ '(lsp-eslint-auto-fix-on-save t)
  '(lsp-eslint-run "onSave")
  '(lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(company eglot flymake-eslint helm-xref lsp-mode treesit-auto
+             web-mode yasnippet))
  '(standard-indent 2)
  '(treesit-font-lock-level 4)
  '(web-mode-enable-auto-pairing t)
