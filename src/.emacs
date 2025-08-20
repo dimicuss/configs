@@ -3,12 +3,10 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
-(use-package markdown-mode :ensure t)
 (use-package helm :ensure t)
-(use-package helm-xref :ensure t)
-(use-package yasnippet :ensure t)
-(use-package company :ensure t)
+(use-package markdown-mode :ensure t)
 (use-package lsp-mode :ensure t)
+(use-package lsp-ui :ensure t)
 (use-package treesit-auto
   :ensure t
   :custom
@@ -16,6 +14,10 @@
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
 
 (use-package web-mode
   :ensure t
@@ -30,18 +32,49 @@
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)))
 
-(defun setup-company ()
-  (company-mode 1)
-  (yas-minor-mode 1)
-  (set (make-local-variable 'company-backends)
-       '((company-dabbrev-code company-yasnippet))))
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :config
+  (progn    
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+    (when treemacs-python-executable
+      (treemacs-git-commit-diff-mode t))
+
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
+
+    (treemacs-hide-gitignored-files-mode nil))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t d"   . treemacs-select-directory)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
 
 (defun launch-ide ()
   (flyspell-mode +1)
-  (auto-revert-mode +1)
   (subword-mode +1)
-  (lsp-mode +1)
-  (setup-company))
+  (lsp-mode +1))
+
+(helm-mode +1)
+(auto-revert-mode +1)
+(savehist-mode +1)
+(desktop-save-mode +1)
+(electric-indent-mode -1)
+(treemacs-start-on-boot)
 
 (add-hook 'css-ts-mode-hook #'launch-ide)
 (add-hook 'scss-mode-hook #'launch-ide)
@@ -50,23 +83,15 @@
 (add-hook 'tsx-ts-mode-hook #'launch-ide)
 (add-hook 'typescript-ts-mode-hook #'launch-ide)
 (add-hook 'bash-ts-mode-hook #'launch-ide)
-(add-hook 'emacs-lisp-mode-hook #'setup-company)
 (add-hook 'before-save-hook #'lsp-format-buffer)
+
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
+(add-to-list 'auto-mode-alist '("\\.mts\\'" . typescript-ts-mode))
 
 (define-key global-map [remap find-file] #'helm-find-files)
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
-(add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.mts\\'" . typescript-ts-mode))
-
-
-(yas-reload-all)
-(push '(company-semantic :with company-yasnippet) company-backends)
-
-(helm-mode +1)
-(savehist-mode +1)
-(desktop-save-mode +1)
-(electric-indent-mode -1)
+(define-key global-map [remap xref-find-references] #'lsp-find-references)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -86,7 +111,6 @@
  '(custom-enabled-themes '(modus-vivendi))
  '(desktop-save-mode t)
  '(display-line-numbers t)
- '(helm-xref-candidate-formatting-function 'helm-xref-format-candidate-full-path)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
@@ -105,9 +129,7 @@
  '(lsp-typescript-format-insert-space-after-opening-and-before-closing-nonempty-braces nil)
  '(make-backup-files nil)
  '(message-log-max nil)
- '(package-selected-packages
-   '(company eglot flymake-eslint helm-xref lsp-mode treesit-auto
-             web-mode yasnippet))
+ '(package-selected-packages nil)
  '(standard-indent 2)
  '(treesit-font-lock-level 4)
  '(web-mode-enable-auto-pairing t)
