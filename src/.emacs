@@ -3,6 +3,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(use-package yasnippet :ensure t)
 (use-package helm :ensure t)
 (use-package markdown-mode :ensure t)
 (use-package lsp-mode :ensure t)
@@ -75,6 +76,9 @@
 (desktop-save-mode +1)
 (electric-indent-mode -1)
 (treemacs-start-on-boot)
+(yas-global-mode +1)
+
+(yas-reload-all)
 
 (add-hook 'css-ts-mode-hook #'launch-ide)
 (add-hook 'scss-mode-hook #'launch-ide)
@@ -92,6 +96,7 @@
 (define-key global-map [remap execute-extended-command] #'helm-M-x)
 (define-key global-map [remap switch-to-buffer] #'helm-mini)
 (define-key global-map [remap xref-find-references] #'lsp-find-references)
+(define-key treemacs-mode-map [mouse-1] #'treemacs-single-click-expand-action)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -108,7 +113,7 @@
  '(completion-styles '(basic partial-completion substring))
  '(completions-sort 'historical)
  '(css-indent-offset 2)
- '(custom-enabled-themes '(modus-vivendi))
+ '(custom-enabled-themes '(modus-vivendi-tinted))
  '(desktop-save-mode t)
  '(display-line-numbers t)
  '(indent-tabs-mode nil)
