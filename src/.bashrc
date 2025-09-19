@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=~/.yarn/bin:$PATH
+export PATH=~/.yarn/bin:~/.config/emacs/bin:$PATH
 export NVM_DIR=$HOME/.nvm
 [ -s $NVM_DIR/nvm.sh ] && source $NVM_DIR/nvm.sh
 [ -s $NVM_DIR/bash_completion ] && source $NVM_DIR/bash_completion
