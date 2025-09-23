@@ -75,13 +75,14 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(with-eval-after-load "ispell"
-  (setq ispell-program-name "hunspell")
-  (setq ispell-dictionary "en_US,ru_RU")
-  (ispell-set-spellchecker-params)
-  (ispell-hunspell-add-multi-dic ispell-dictionary))
-
 (desktop-save-mode +1)
 (auto-revert-mode +1)
 (savehist-mode +1)
+(subword-mode +1)
 
+
+(setq jinx-languages "ru_RU,en_US")
+(setq jinx-camel-modes t)
+(setq jinx-exclude-faces nil)
+(setq jinx-include-faces nil)
+(global-jinx-mode +1)
