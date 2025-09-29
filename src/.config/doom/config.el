@@ -75,14 +75,21 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(desktop-save-mode +1)
-(auto-revert-mode +1)
-(savehist-mode +1)
-(subword-mode +1)
-
 
 (setq jinx-languages "ru_RU,en_US")
 (setq jinx-camel-modes t)
 (setq jinx-exclude-faces nil)
 (setq jinx-include-faces nil)
+(setq lsp-eldoc-enable-hover nil)
+(setq lsp-ui-doc-show-with-cursor t)
+(setq lsp-ui-doc-use-webkit t)
+(setq auto-save-visited-interval 3)
+
+
+(desktop-save-mode +1)
+(auto-revert-mode +1)
+(auto-save-visited-mode +1)
+(global-auto-revert-mode +1)
 (global-jinx-mode +1)
+(global-subword-mode +1)
+(global-eldoc-mode -1)
